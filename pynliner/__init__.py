@@ -28,6 +28,7 @@ class Pynliner(object):
     soup = False
     style_string = False
     stylesheet = False
+    inline_ignore_attr = 'data-inliner-ignore'
     output = False
 
     def __init__(self, log=None):
@@ -155,9 +156,11 @@ class Pynliner(object):
             self.style_string = u''
         else:
             self.style_string += u'\n'
-
         style_tags = self.soup.findAll('style')
         for tag in style_tags:
+            if tag.has_key(self.inline_ignore_attr):
+                continue
+                
             self.style_string += u'\n'.join(tag.contents) + u'\n'
             tag.extract()
 
